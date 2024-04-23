@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <title>Document</title>
+</head>
+<body>
+    <div>
+        {% for id_cat in id_cats %}
+            <a href="#" onclick="catSetting('{{ id_cat }}')">{{ id_cat }}</a>
+        {% endfor %}
+    </div>
+    <div id="catSetting"></div>
+</body>
+</html>

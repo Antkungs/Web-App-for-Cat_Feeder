@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/style.css') }}">
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>Cat Feeder</title>
+  </head>
+  <body>
+
+
+    <div id="mySidenav" class="sidenav">
+      <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times; </a>
+      {% for cat_name in cat_names %}
+        <a href="#" onclick="showCatInfo('{{ cat_name }}'),closeNav()">{{ cat_name }}</a>
+      {% endfor %}
+      <a href="{{ url_for('setting') }}">ตั้งค่าพื้นฐาน</a>
+    </div>
+
+    <span style="font-size:20px;cursor:pointer" onclick="openNav()">&#9776; </span>
+    <div style="margin: 100px;">
+      <div id="catName" style="text-align: center; font-size: 60px;"></div>
+      <div id="catInfo" style="text-align: center; font-size: 30px;">
+
+      </div><br>
+      <canvas id="chart"></canvas>
+    </div>
+
+
+  </body>
+</html>
