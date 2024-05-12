@@ -186,7 +186,7 @@ function catSetting(ids,names) {
                 <label for="tank2" id="tank2">${data[1].name_tank}</label><br>
             
                 <br>
-                <input type="submit" value="Submit">
+                <button type="submit" value="Submit">Submit</button>
                 <button type="reset" onclick="redirectToSetting()">Cancel</button>
         
             </form>
@@ -223,8 +223,8 @@ function lineSetting() {
                     <label for="token">Token Line (สำหรับใช้การแจ้งเตือน)</label><br>
                     <input type="text" id="token" name="token" placeholder="Token_Line" required><br>
                 </div><br>
-                <input type="submit" value="Submit">
-                <button type="reset" onclick="redirectToSetting()">ล้างข้อมูล</button>
+                <button type="submit" value="Submit">Submit</button>
+                <button type="reset" onclick="redirectToSetting()">Cancel</button>
             </form>
         </div>
     `;
@@ -232,6 +232,9 @@ function lineSetting() {
 }
 
 function tankSetting() {
+    fetch('/getTank')
+    .then(response => response.json())
+    .then(data => {
     const catSetting = document.getElementById('catSetting');
     catSetting.innerHTML = ``
     const hideCatSettingElement = document.getElementById('hideCatSetting');
@@ -239,15 +242,29 @@ function tankSetting() {
         <div  style="text-align: center; padding-top: 20px;">
             <form id="updateFormTank" action="/insertTank" method="post">
                 <div>
-                    <label for="Tank">Token Line (สำหรับใช้การแจ้งเตือน)</label><br>
-                    <input type="text" id="token" name="token" placeholder="Token_Line" required><br>
+                    <label for="Tank1">Rename ${data[0].name_tank}</label><br>
+                    <input type="text" id="Tank1" name="Tank1" placeholder="Rename tank1" value="${data[0].name_tank}" required><br>
                 </div><br>
-                <input type="submit" value="Submit">
-                <button type="reset" onclick="redirectToSetting()">ล้างข้อมูล</button>
+                <div>
+                    <label for="percenTank1">แจ้งเตือนเมื่อปริมาณอาหารถัง ${data[0].name_tank} <br>ต่ำกว่า(ร้อยละ)</label><br>
+                    <input type="text" id="percenTank1" name="percenTank1" placeholder="ร้อยละ" required><br>
+                </div><br>
+
+                <div>
+                    <label for="percenTank2">Rename ${data[1].name_tank}</label><br>
+                    <input type="text" id="Tank2" name="Tank2" placeholder="Rename tank2" value="${data[1].name_tank}" required><br>
+                </div><br>
+                <div>
+                    <label for="percenTank2">แจ้งเตือนเมื่อปริมาณอาหารถัง ${data[1].name_tank} <br>ต่ำกว่า(ร้อยละ)</label><br>
+                    <input type="text" id="percenTank2" name="percenTank2" placeholder="ร้อยละ" required><br>
+                </div><br>
+                
+                <button type="submit" value="Submit">Submit</button>
+                <button type="reset" onclick="redirectToSetting()">Cancel</button>
             </form>
         </div>
     `;
-
+    });
 }
 
 

@@ -56,10 +56,10 @@ def getTank():
     db = connect()  # Assuming connect() is a function that connects to the database
     if request.method == 'GET':
         cursor = db.cursor()
-        cursor.execute("SELECT id_tank, name_tank FROM tank")
+        cursor.execute("SELECT * FROM tank")
         data = cursor.fetchall()
         if data:
-            results = [{'id_tank': record[0], 'name_tank': record[1]} for record in data]
+            results = [{'id_tank': record[0], 'name_tank': record[1], 'persens': record[2]} for record in data]
             return jsonify(results)
         else:
             return jsonify({"error": "No data found"})
@@ -115,6 +115,40 @@ def insertLine():
         try:
             # ทำการ execute คำสั่ง SQL
             cursor.execute(sql, values)
+            # commit การเปลี่ยนแปลงในฐานข้อมูล
+            db.commit()
+            return """
+            <script>
+                alert('Update Successfully');
+                window.location.href = '/';
+            </script>
+            """
+        except Exception as e:
+            # ถ้าเกิดข้อผิดพลาดในการ execute คำสั่ง SQL
+            db.rollback()
+            return f'Error: {e}'
+        
+@app.route('/insertTank', methods=['POST'])
+def insertTank():
+    if request.method == 'POST':
+        Tank1 = request.form['Tank1']
+        percenTank1 = request.form['percenTank1']
+        Tank2 = request.form['Tank2']
+        percenTank2 = request.form['percenTank2']
+
+        db = connect()
+        cursor = db.cursor()
+        sql1 = "UPDATE `tank` SET `name_tank` = %s , `notification_percen` = %s WHERE id_tank = 1"
+        values1 = (Tank1,percenTank1)
+        sql2 = "UPDATE `tank` SET `name_tank` = %s , `notification_percen` = %s WHERE id_tank = 2"
+        values2 = (Tank2,percenTank2)
+
+        try:
+            # ทำการ execute คำสั่ง SQL
+            cursor.execute(sql1, values1)
+            # commit การเปลี่ยนแปลงในฐานข้อมูล
+            db.commit()
+            cursor.execute(sql2, values2)
             # commit การเปลี่ยนแปลงในฐานข้อมูล
             db.commit()
             return """

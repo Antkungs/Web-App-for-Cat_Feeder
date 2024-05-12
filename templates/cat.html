@@ -14,14 +14,14 @@
     <div id="mySidenav" class="sidenav">
       <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times; </a>
       {% for cat_name in cat_names %}
-        <a href="#" onclick="showCatInfo('{{ cat_name }}'),closeNav()">{{ cat_name }}</a>
+        <a href="#" onclick="showCatInfo('{{ cat_name }}'),closeNav()"><b>{{ cat_name }}</b></a>
       {% endfor %}
       <a href="{{ url_for('setting') }}">ตั้งค่าพื้นฐาน</a>
     </div>
 
     <span style="font-size:20px;cursor:pointer" onclick="openNav()">&#9776; </span>
     <div>
-      <div id="catName" style="text-align: center;"></div>
+      <b><div id="catName" style="text-align: center;"></div></b>
       <div id="catInfo" class="catInfo" ></div><br>
 
       <div>
