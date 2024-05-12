@@ -1,0 +1,47 @@
+body {
+    font-family: "Courier New", Courier, monospace;
+    background-color: #F8F2DA;
+  }
+
+
+
+.settingCat{
+  text-align: center;
+  background-color: #f1f1f1;
+  margin: 5px;
+  padding: 10px;
+  font-size: 16px;
+  border-radius: 5px; /* ทำให้เกิดกรอบโค้ง */
+  overflow: hidden;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  text-decoration: none ;
+  color: black;
+}
+
+input[type="text"]{
+  padding: 8px;
+  margin: 5px;
+  border-radius: 10px;
+  border: none;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+input[type="time"]{
+  padding: 8px;
+  margin: 2px;
+  border-radius: 10px;
+  border: none;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+input[type="radio"],.tank{
+  padding: 8px;
+  margin: 10px;
+}
+
+@media screen and (max-height: 450px) { 
+    body{
+      background-color: #F8F2DA;
+      font-size: 70%;
+    }
+}

@@ -19,7 +19,32 @@ function showCatInfo(catName) {
             if (data.error) {
                 catInfoDiv.textContent = 'Error: ' + data.error;
             } else if (data.length === 0) {
-                catInfoDiv.textContent = "ยังไม่มีการกินวันนี้";
+                const recordDiv = document.createElement('div');
+                    recordDiv.classList.add('record');
+
+                    const foodGivenDiv = document.createElement('div');
+                    foodGivenDiv.classList.add('info-box');
+                    foodGivenDiv.innerHTML = `
+                    <p>ยังไม่มีการกินวันนี้</p>
+                    `;
+                    recordDiv.appendChild(foodGivenDiv);
+
+                    const foodEatenDiv = document.createElement('div');
+                    foodEatenDiv.classList.add('info-box');
+                    foodEatenDiv.innerHTML = `
+                    <p>ยังไม่มีการกินวันนี้</p>
+                    `;
+                    recordDiv.appendChild(foodEatenDiv);
+
+                    const foodRemainingDiv = document.createElement('div');
+                    foodRemainingDiv.classList.add('info-box');
+                    foodRemainingDiv.innerHTML = `
+                    <p>ยังไม่มีการกินวันนี้</p>
+                    `;
+                    recordDiv.appendChild(foodRemainingDiv);
+
+                    catInfoDiv.appendChild(recordDiv);
+
             } else {
                 // Show cat eating information
                 data.forEach((eatingRecord, index) => {
@@ -85,7 +110,7 @@ function showGrape(catName) {
                     scales: {
                         y: {
                             min: 0,
-                            max: 200
+                            max: 300
                         }
                     }
                 }
@@ -95,59 +120,135 @@ function showGrape(catName) {
         })
         .catch(error => console.error('Error:', error));
 }
-function catSetting(id) {
-    fetch('/setting/getNameSetting/' + id)
+function catSetting(ids,names) {
+    fetch('/getTank')
     .then(response => response.json())
     .then(data => {
         const catSettingElement = document.getElementById('catSetting');
-        catSettingElement.innerHTML = `
-            <h3>แก้ไขรายละเอียดแมว</h3>
-            <p>ชื่อ: ${data.cat_name}</p>
-            <form id="updateForm" action="/insertData/${id}" method="post">
-                <label for="name">ชื่อ:</label><br>
-                <input type="text" id="name" name="name" value="${data.cat_name}" required><br>
-                <label for="food_quantity">ปริมาณอาหาร:</label><br>
-                <input type="text" id="food_quantity" name="food_quantity" required><br>
+        catSettingElement.innerHTML = ``
+        const hideCatSettingElement = document.getElementById('hideCatSetting');
+        hideCatSettingElement.innerHTML = `
+        <div style="align=center; ,padding: 20px;">
+            <h3 style="text-align: center;  padding-top:30px"><b>แก้ไขรายละเอียดแมว ${names}</b></h3>
+            <div style="text-align: center;">
+
+            <form id="updateForm" action="/insertData/${ids}" method="post">
+                
+                <div  style="padding-top:20px">
+                    <label for="name">ตั้งค่าชื่อแมว</label><br>
+                    <input type="text" id="name" name="name" value="${names}" placeholder="${names}" required><br>
+                </div>
+            
+                <div  style="padding-top:20px">
+                    <label for="food_quantity">ปริมาณอาหารต่อมื้อ (กรัม) </label><br>
+                    <input type="text" id="food_quantity" name="food_quantity" placeholder="ปริมาณอาหาร" required><br>
+                </div>
                 <p>ช่วงเวลาการให้อาหาร</p>
-                <label for="stime_1">เริ่มมื้อ 1:</label><br>
-                <input type="time" id="stime_1" name="stime_1" required><br>
-                <label for="etime_1">สิ้นสุดมื้อ 1:</label><br>
-                <input type="time" id="etime_1" name="etime_1" required><br>
-
-                <label for="stime_2">เริ่มมื้อ 2:</label><br>
-                <input type="time" id="stime_2" name="stime_2" required><br>
-                <label for="etime_2">สิ้นสุดมื้อ 2:</label><br>
-                <input type="time" id="etime_2" name="etime_2" required><br>
-
-                <label for="stime_3">เริ่มมื้อ 3:</label><br>
-                <input type="time" id="stime_3" name="stime_3" required><br>      
-                <label for="etime_3">สิ้นสุดมื้อ 3:</label><br>
-                <input type="time" id="etime_3" name="etime_3" required><br>     
-
-                <label for="food_container">ถังอาหาร:</label><br>
-                <input type="radio" id="tank1" name="tank" value="1" required>
-                <label for="tank1" id="tank1">${data.results[0].name_tank}</label><br>
+                <div>
+                <div>
+                    <label for="stime_1">เริ่มมื้อ 1  </label>
+                    <input type="time" id="stime_1" name="stime_1" required  >
+                </div>
+                <div style="padding-top:20px">
+                    <label for="etime_1">สิ้นสุดมื้อ 1</label>
+                    <input type="time" id="etime_1" name="etime_1" required><br>
+                </div>
+                </div>
+            
+                <div>
+                <div style="padding-top:20px">
+                    <label for="stime_2">เริ่มมื้อ 2 </label>
+                    <input type="time" id="stime_2" name="stime_2" required>
+                </div>
+                <div style="padding-top:20px">
+                    <label for="etime_2">สิ้นสุดมื้อ 2 </label>
+                    <input type="time" id="etime_2" name="etime_2" required><br>
+                </div>
+                </div>
+            
+                <div>
+                <div style="padding-top:20px">
+                    <label for="stime_3">เริ่มมื้อ 3 </label>
+                    <input type="time" id="stime_3" name="stime_3" required>   
+                </div>
+                <div style="padding-top:20px"> 
+                    <label for="etime_3">สิ้นสุดมื้อ 3 </label>
+                    <input type="time" id="etime_3" name="etime_3" required><br>   
+                </div>
+                </div>
+            
+                <br>
+                <label for="food_container">ถังอาหาร</label><br>
+                <input type="radio" id="tank1" name="tank" value="${data[0]['id_tank']}" required>
+                <label for="tank1" id="tank1">${data[0].name_tank}</label><br>
                             
-                <input type="radio" id="tank2" name="tank" value="2" required>
-                <label for="tank2" id="tank2">${data.results[1].name_tank}</label><br>
-
+                <input type="radio" id="tank2" name="tank" value="${data[1]['id_tank']}" required>
+                <label for="tank2" id="tank2">${data[1].name_tank}</label><br>
+            
+                <br>
                 <input type="submit" value="Submit">
-                <button type="reset">ล้างข้อมูล</button>
-            </form>
-        `;
+                <button type="reset" onclick="redirectToSetting()">Cancel</button>
         
-        // เพิ่ม event listener เพื่อให้หน้าเว็บ redirect หลังจากกด submit
-        document.getElementById('updateForm').addEventListener('submit', function(event) {
-            // เมื่อ submit ให้เรียกฟังก์ชัน redirect และป้องกัน default behavior ของ form
-            event.preventDefault();
-            redirectHome();
-        });
+            </form>
+            </div>
+            </div>
+        `;
     });
+
+    document.getElementById('updateForm').addEventListener('submit', function(event) {
+        // เมื่อ submit ให้เรียกฟังก์ชัน redirect และป้องกัน default behavior ของ form
+        event.preventDefault();
+    });
+    
+
 }
 
-// ฟังก์ชันสำหรับ redirect ไปยังหน้าแรก
-function redirectHome() {
-    alert("แก้ไขข้อมูลเสร็จสิ้น");
-    window.location.href = '/'; // เปลี่ยน URL ตามต้องการ
+function redirectToHomePage() {
+    window.location.href = "/";
 }
+
+function redirectToSetting() {
+    window.location.href = "/setting";
+}
+
+
+function lineSetting() {
+    const catSetting = document.getElementById('catSetting');
+    catSetting.innerHTML = ``
+    const hideCatSettingElement = document.getElementById('hideCatSetting');
+    hideCatSettingElement.innerHTML = `
+        <div  style="text-align: center; padding-top: 20px;">
+            <form id="updateFormLine" action="/insertLine" method="post">
+                <div>
+                    <label for="token">Token Line (สำหรับใช้การแจ้งเตือน)</label><br>
+                    <input type="text" id="token" name="token" placeholder="Token_Line" required><br>
+                </div><br>
+                <input type="submit" value="Submit">
+                <button type="reset" onclick="redirectToSetting()">ล้างข้อมูล</button>
+            </form>
+        </div>
+    `;
+
+}
+
+function tankSetting() {
+    const catSetting = document.getElementById('catSetting');
+    catSetting.innerHTML = ``
+    const hideCatSettingElement = document.getElementById('hideCatSetting');
+    hideCatSettingElement.innerHTML = `
+        <div  style="text-align: center; padding-top: 20px;">
+            <form id="updateFormTank" action="/insertTank" method="post">
+                <div>
+                    <label for="Tank">Token Line (สำหรับใช้การแจ้งเตือน)</label><br>
+                    <input type="text" id="token" name="token" placeholder="Token_Line" required><br>
+                </div><br>
+                <input type="submit" value="Submit">
+                <button type="reset" onclick="redirectToSetting()">ล้างข้อมูล</button>
+            </form>
+        </div>
+    `;
+
+}
+
+
 

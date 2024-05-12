@@ -2,9 +2,12 @@
 
 body {
   font-family: "Courier New", Courier, monospace;
-  background-color: #D3D3D3;
+  background-color: #F8F2DA;
 }
 
+div{
+  font-size: 30px;
+}
 .sidenav {
   height: 100%;
   width: 0;
@@ -12,7 +15,7 @@ body {
   z-index: 1;
   top: 0;
   left: 0;
-  background-color: #3333FF;
+  background-color: #484452;
   overflow-x: hidden;
   transition: 0.5s;
   padding-top: 60px;
@@ -41,24 +44,58 @@ body {
 
 
 .record {
-  display: flex;
   padding: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.catInfo{
+  justify-content: center;
+
 }
 
 .info-box {
   text-align: center;
-  flex: 1;
   background-color: #f1f1f1;
   margin: 5px;
   padding: 10px;
   font-size: 16px;
   border-radius: 5px; /* ทำให้เกิดกรอบโค้ง */
   overflow: hidden;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
 }
 
 
-@media screen and (max-height: 450px) {
+@media screen and (max-width: 426px) {
   .sidenav {padding-top: 15px;}
   .sidenav a {font-size: 18px;}
+
+  .record {
+    padding: 20px;
+    width: 400px;
+    display: flex;
+
+  }
+  
+  .catInfo{
+    justify-content: center;
+    display: flex;
+  
+  }
+  
+  .info-box {
+    text-align: center;
+    flex: 1;
+    background-color: #f1f1f1;
+    margin: 5px;
+    padding: 10px;
+    font-size: 13px;
+    border-radius: 10px; /* ทำให้เกิดกรอบโค้ง */
+    overflow: hidden;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  }
 }
+
+
+
 

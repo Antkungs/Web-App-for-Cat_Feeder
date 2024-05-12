@@ -38,33 +38,34 @@ def setting():
     db = connect()
     if request.method == 'GET':
         cursor = db.cursor()
-        cursor.execute("SELECT id_cat FROM catinformation")
+        cursor.execute("SELECT id_cat , name_cat FROM catinformation")
         data = cursor.fetchall()
-        results = [x[0] for x in data]
+        results = []
+        for cat in data:
+            results.append({'id_cat': cat[0], 'name_cat': cat[1]})
+
         print(results)
-        return render_template('setting.html', id_cats=results)  # Correct indentation
+        return render_template('setting.html', results=results)
 
     # Return an error message if the request method is not GET
     return jsonify({"error": "Invalid request"})
 
 
-@app.route('/setting/getNameSetting/<id_cat>', methods=['GET'])
-def getNameSetting(id_cat):
+@app.route('/getTank', methods=['GET'])
+def getTank():
     db = connect()  # Assuming connect() is a function that connects to the database
     if request.method == 'GET':
         cursor = db.cursor()
-        cursor.execute(f"SELECT name_cat FROM catinformation WHERE id_cat = '{id_cat}'")
-        data = cursor.fetchone()
+        cursor.execute("SELECT id_tank, name_tank FROM tank")
+        data = cursor.fetchall()
         if data:
-            cursors = db.cursor()
-            cursors.execute(f"SELECT * FROM tank WHERE 1")
-            tank = cursors.fetchall()
-            cat_name = data[0]
-            results = [{'id_tank': record[0], 'name_tank': record[1]} for record in tank]
-            return jsonify({'cat_name': cat_name, 'results': results})
+            results = [{'id_tank': record[0], 'name_tank': record[1]} for record in data]
+            return jsonify(results)
+        else:
+            return jsonify({"error": "No data found"})
 
-    # Return an error message if the request method is not GET or if data is not found
-    return jsonify({"error": "Invalid request or data not found"})
+    return jsonify({"error": "Invalid request"})
+
 
 @app.route('/insertData/<id_cat>', methods=['POST'])
 def insert_data(id_cat):
@@ -90,7 +91,38 @@ def insert_data(id_cat):
             cursor.execute(sql, values)
             # commit การเปลี่ยนแปลงในฐานข้อมูล
             db.commit()
-            return 'Data updated successfully'
+            return """
+            <script>
+                alert('Update Successfully');
+                window.location.href = '/';
+            </script>
+            """
+        except Exception as e:
+            # ถ้าเกิดข้อผิดพลาดในการ execute คำสั่ง SQL
+            db.rollback()
+            return f'Error: {e}'
+        
+@app.route('/insertLine', methods=['POST'])
+def insertLine():
+    if request.method == 'POST':
+        token = request.form['token']
+
+        db = connect()
+        cursor = db.cursor()
+        sql = "UPDATE `notification` SET `token` = %s WHERE 1"
+        values = (token,)
+
+        try:
+            # ทำการ execute คำสั่ง SQL
+            cursor.execute(sql, values)
+            # commit การเปลี่ยนแปลงในฐานข้อมูล
+            db.commit()
+            return """
+            <script>
+                alert('Update Successfully');
+                window.location.href = '/';
+            </script>
+            """
         except Exception as e:
             # ถ้าเกิดข้อผิดพลาดในการ execute คำสั่ง SQL
             db.rollback()
