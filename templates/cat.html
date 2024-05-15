@@ -12,6 +12,7 @@
 
 
     <div id="mySidenav" class="sidenav">
+      <a href="/">หน้าแรก</a>
       <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times; </a>
       {% for cat_name in cat_names %}
         <a href="#" onclick="showCatInfo('{{ cat_name }}'),closeNav()"><b>{{ cat_name }}</b></a>
@@ -22,6 +23,15 @@
     <span style="font-size:20px;cursor:pointer" onclick="openNav()">&#9776; </span>
     <div>
       <b><div id="catName" style="text-align: center;"></div></b>
+
+       <!--
+      <div style="text-align: center;">
+        <b>agfwe</b>
+      </div>
+      <div class="webCam"> 
+        <img id="video_feed" src="{{ url_for('video_feed') }}" >
+      </div>
+      -->
       <div id="catInfo" class="catInfo" ></div><br>
 
       <div>

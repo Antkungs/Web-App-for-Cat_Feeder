@@ -6,6 +6,7 @@ function closeNav() {
     document.getElementById("mySidenav").style.width = "0";
 }
 
+
 function showCatInfo(catName) {
     fetch('/get_cat_info/' + catName)
         .then(response => response.json())
@@ -13,6 +14,7 @@ function showCatInfo(catName) {
             showGrape(catName);
             const catInfoDiv = document.getElementById('catInfo');
             catInfoDiv.innerHTML = ''; // Clear any existing content
+            //document.getElementById('video_feed').src = '';
             const catNameDiv = document.getElementById('catName');
             catNameDiv.textContent = catName;
 
@@ -44,6 +46,7 @@ function showCatInfo(catName) {
                     recordDiv.appendChild(foodRemainingDiv);
 
                     catInfoDiv.appendChild(recordDiv);
+                    
 
             } else {
                 // Show cat eating information
@@ -83,8 +86,9 @@ function showCatInfo(catName) {
         .catch(error => console.error('Error:', error));
 }
 
+
 function showGrape(catName) {
-    fetch('/get_cat_infogrape/' + catName)
+    fetch('/get_cat_oneMonthInfoGrape/' + catName)
         .then(response => response.json())
         .then(data => {
             const ctx = document.getElementById('chart').getContext('2d');

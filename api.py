@@ -1,8 +1,9 @@
-from flask import Flask, request, jsonify
+import cv2
+from flask import Flask, Response, request, jsonify
 import mysql.connector
 from flask_cors import CORS
 from flask import render_template
-from datetime import datetime
+from datetime import date, datetime, timedelta
 
 app = Flask(__name__)
 CORS(app)
@@ -20,6 +21,30 @@ def connect():
         print("Connected to MySQL!")
     return db
 
+def webcam():
+    # Open webcam
+    cap = cv2.VideoCapture(0)
+    
+    while True:
+        ret, frame = cap.read()
+        if not ret:
+            break
+        
+        # Process frame if needed
+        # Example: Convert frame to grayscale
+        # gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        
+        # Encode frame as JPEG
+        ret, jpeg = cv2.imencode('.jpg', frame)
+        
+        # Yield frame as byte stream
+        yield (b'--frame\r\n'
+               b'Content-Type: image/jpeg\r\n\r\n' + jpeg.tobytes() + b'\r\n')
+        
+@app.route('/webcamFeed')
+def video_feed():
+    return Response(webcam(), mimetype='multipart/x-mixed-replace; boundary=frame')
+        
 @app.route('/', methods=['GET'])
 def webApp():
     db = connect()
@@ -44,7 +69,7 @@ def setting():
         for cat in data:
             results.append({'id_cat': cat[0], 'name_cat': cat[1]})
 
-        print(results)
+        #print(results)
         return render_template('setting.html', results=results)
 
     # Return an error message if the request method is not GET
@@ -162,10 +187,42 @@ def insertTank():
             db.rollback()
             return f'Error: {e}'
 
-
-
-@app.route('/get_cat_infogrape/<cat_name>', methods=['GET'])
-def get_cat_infogrape(cat_name):
+#การกินทั้งหมดในเดือนปัจจุบัน
+@app.route('/get_cat_oneMonthInfoGrape/<cat_name>', methods=['GET'])
+def get_cat_oneMonthInfoGrape(cat_name):
+    db = connect()
+    cursor = db.cursor()
+    cursor.execute("SELECT id_cat FROM catinformation WHERE name_cat = %s", (cat_name,))
+    data = cursor.fetchone()
+    if data:
+        cat_id = data[0]
+        current_month_start = date.today().replace(day=1)
+        next_month_start = (current_month_start.replace(day=28) + timedelta(days=4)).replace(day=1)
+        cursor.execute("""
+            SELECT DATE(CurrentTime), SUM(food_eat) 
+            FROM eatinformation 
+            WHERE id_cat = %s AND CurrentTime >= %s AND CurrentTime < %s
+            GROUP BY DATE(CurrentTime) 
+            ORDER BY CurrentTime ASC
+        """, (cat_id, current_month_start, next_month_start))
+        data = cursor.fetchall()
+        results = []
+        for record in data:
+            original_date = record[0]
+            formatted_date = original_date.strftime("%d %b %Y")
+            cat_info = {
+                'cat_name': cat_name,
+                'date': formatted_date,
+                'total_food_eat': record[1],
+            }
+            results.append(cat_info)
+        return jsonify(results)
+    else:
+        return jsonify({"error": "Cat not found"})
+    
+#การกินทั้งหมด
+@app.route('/get_cat_allInfoGrape/<cat_name>', methods=['GET'])
+def get_cat_allInfoGrape(cat_name):
     db = connect()
     cursor = db.cursor()
     cursor.execute(f"SELECT id_cat FROM catinformation WHERE name_cat = '{cat_name}'")
@@ -191,7 +248,7 @@ def get_cat_infogrape(cat_name):
     else:
         return jsonify({"error": "Cat not found"})
 
-    
+#ข้อมูลการกิน ณ วันนี้
 @app.route('/get_cat_info/<cat_name>', methods=['GET'])
 def get_cat_info(cat_name):
     db = connect()
@@ -220,7 +277,7 @@ def get_cat_info(cat_name):
         return jsonify({"error": "Cat not found"})
 
 
-
+#ข้อมูลของแมว
 @app.route('/catinformation', methods=['GET'])
 def get_catinformation():
     db = connect()
@@ -235,12 +292,12 @@ def get_catinformation():
                 'name_cat': x[1],
                 'food_give': x[2],
                 'id_tank': x[3],
-                'time1_start': str(datetime.timedelta(seconds=x[4].total_seconds())),
-                'time1_end': str(datetime.timedelta(seconds=x[5].total_seconds())),    
-                'time2_start': str(datetime.timedelta(seconds=x[6].total_seconds())),
-                'time2_end': str(datetime.timedelta(seconds=x[7].total_seconds())),
-                'time3_start': str(datetime.timedelta(seconds=x[8].total_seconds())),
-                'time3_end': str(datetime.timedelta(seconds=x[9].total_seconds())),
+                'time1_start': str(timedelta(seconds=x[4].total_seconds())),
+                'time1_end': str(timedelta(seconds=x[5].total_seconds())),    
+                'time2_start': str(timedelta(seconds=x[6].total_seconds())),
+                'time2_end': str(timedelta(seconds=x[7].total_seconds())),
+                'time3_start': str(timedelta(seconds=x[8].total_seconds())),
+                'time3_end': str(timedelta(seconds=x[9].total_seconds())),
                 'time1_status': x[10],
                 'time2_status': x[11],
                 'time3_status': x[12],
