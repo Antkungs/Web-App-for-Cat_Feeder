@@ -1,6 +1,6 @@
 
 body {
-  font-family: "Courier New", Courier, monospace;
+  font-family: "Poppins", sans-serif;
   background-color: #F8F2DA;
 }
 
@@ -75,11 +75,14 @@ div{
   .sidenav {padding-top: 15px;}
   .sidenav a {font-size: 18px;}
 
+
+  #video_feed{
+    width: 400px;
+  }
+
   .webCam{
     text-align: center;
-    width: 50%;
-    height: auto;
-
+    padding-top: 50px;
   }
   .record {
     padding: 20px;
@@ -88,11 +91,6 @@ div{
 
   }
   
-  .catInfo{
-    justify-content: center;
-    display: flex;
-  
-  }
   
   .info-box {
     text-align: center;

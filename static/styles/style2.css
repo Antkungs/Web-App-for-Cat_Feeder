@@ -1,6 +1,9 @@
 body {
-    font-family: "Courier New", Courier, monospace;
+    font-family: "Poppins", sans-serif;
     background-color: #F8F2DA;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
   }
 
 
@@ -37,6 +40,11 @@ input[type="time"]{
 input[type="radio"],.tank{
   padding: 8px;
   margin: 10px;
+}
+
+.padding-time{
+  padding-left: 800px; 
+  padding-right: 800px;
 }
 
 button[type="submit"]{
@@ -101,9 +109,46 @@ button:hover::before {
   left: -30px;
 }
 
-@media screen and (max-height: 450px) { 
-    body{
-      background-color: #F8F2DA;
-      font-size: 70%;
-    }
+@media screen and (max-width: 1440px) { 
+
+  .padding-time{
+    padding-left: 500px; 
+    padding-right: 500px;
+  }
 }
+
+@media screen and (max-width: 1024px) { 
+
+  body{
+    background-color: #F8F2DA;
+    font-size: 80%;
+  }
+  .padding-time{
+    padding-left: 300px; 
+    padding-right: 300px;
+  }
+}
+
+@media screen and (max-width: 768px) { 
+
+  body{
+    background-color: #F8F2DA;
+    font-size: 80%;
+  }
+  .padding-time{
+    padding-left: 150px; 
+    padding-right: 150px
+  }
+}
+
+@media screen and (max-width: 500px) { 
+  body{
+    background-color: #F8F2DA;
+    font-size: 80%;
+  }
+  .padding-time{
+    padding: 0px;
+  }
+}
+
+

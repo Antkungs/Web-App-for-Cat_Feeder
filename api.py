@@ -4,6 +4,7 @@ import mysql.connector
 from flask_cors import CORS
 from flask import render_template
 from datetime import date, datetime, timedelta
+import LineNotifi as li
 
 app = Flask(__name__)
 CORS(app)
@@ -84,7 +85,23 @@ def getTank():
         cursor.execute("SELECT * FROM tank")
         data = cursor.fetchall()
         if data:
-            results = [{'id_tank': record[0], 'name_tank': record[1], 'persens': record[2]} for record in data]
+            results = [{'id_tank': record[0], 'name_tank': record[1], 'notification_percen': record[2]} for record in data]
+            return jsonify(results)
+        else:
+            return jsonify({"error": "No data found"})
+
+    return jsonify({"error": "Invalid request"})
+
+
+@app.route('/getNameTank/<id_tank>', methods=['GET'])
+def getNameTank(id_tank):
+    db = connect()  # Assuming connect() is a function that connects to the database
+    if request.method == 'GET':
+        cursor = db.cursor()
+        cursor.execute(f"SELECT * FROM tank WHERE id_tank = '{id_tank}'")
+        data = cursor.fetchall()
+        if data:
+            results = [{ 'name_tank': record[1], 'notification_percen': record[2]} for record in data]
             return jsonify(results)
         else:
             return jsonify({"error": "No data found"})
@@ -142,6 +159,7 @@ def insertLine():
             cursor.execute(sql, values)
             # commit การเปลี่ยนแปลงในฐานข้อมูล
             db.commit()
+            li.send_text(token, "\nเปิดการใช้งานการแจ้งเตือนเครื่องให้อาหารอัตโนมัติสำเร็จ")
             return """
             <script>
                 alert('Update Successfully');
@@ -378,6 +396,23 @@ def update_status():
     cursor = db.cursor()
     # อัปเดตค่าของ time1_status, time2_status, และ time3_status เป็น FALSE ทุกๆเที่ยงคืน
     cursor.execute("UPDATE catinformation SET time1_status = FALSE, time2_status = FALSE, time3_status = FALSE")
+    db.commit()
+    cursor.close()
+
+def deleteData(select):
+    db = connect()
+    cursor = db.cursor()
+    # อัปเดตค่าของ time1_status, time2_status, และ time3_status เป็น FALSE ทุกๆเที่ยงคืน
+    cursor.execute(f"DELETE FROM catinformation WHERE id_cat = '{select}';")
+    db.commit()
+    cursor.close()
+    updateID(select)
+
+def updateID(select):
+    db = connect()
+    cursor = db.cursor()
+    # อัปเดตค่าของ time1_status, time2_status, และ time3_status เป็น FALSE ทุกๆเที่ยงคืน
+    cursor.execute(f"UPDATE catinformation SET id_cat = id_cat - 1 WHERE id_cat > '{select}';")
     db.commit()
     cursor.close()
 

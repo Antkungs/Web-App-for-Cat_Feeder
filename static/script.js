@@ -14,7 +14,12 @@ function showCatInfo(catName) {
             showGrape(catName);
             const catInfoDiv = document.getElementById('catInfo');
             catInfoDiv.innerHTML = ''; // Clear any existing content
+            const tageTitle = document.getElementById('tageTitle');
+            tageTitle.innerHTML = ''; // Clear any existing content
             //document.getElementById('video_feed').src = '';
+            const video_feed = document.getElementById('video_feed');
+            video_feed.src = ''; // Clears the src attribute
+            video_feed.style.display = 'none'; // Hides the img element            
             const catNameDiv = document.getElementById('catName');
             catNameDiv.textContent = catName;
 
@@ -88,7 +93,7 @@ function showCatInfo(catName) {
 
 
 function showGrape(catName) {
-    fetch('/get_cat_oneMonthInfoGrape/' + catName)
+    fetch('/get_cat_allInfoGrape/' + catName)
         .then(response => response.json())
         .then(data => {
             const ctx = document.getElementById('chart').getContext('2d');
@@ -139,56 +144,64 @@ function catSetting(ids,names) {
             <form id="updateForm" action="/insertData/${ids}" method="post">
                 
                 <div  style="padding-top:20px">
-                    <label for="name">ตั้งค่าชื่อแมว</label><br>
+                    <label for="name"><b>ตั้งค่าชื่อแมว</b></label><br>
                     <input type="text" id="name" name="name" value="${names}" placeholder="${names}" required><br>
                 </div>
             
                 <div  style="padding-top:20px">
-                    <label for="food_quantity">ปริมาณอาหารต่อมื้อ (กรัม) </label><br>
+                    <label for="food_quantity"><b>ปริมาณอาหารต่อมื้อ (กรัม) </b></label><br>
                     <input type="text" id="food_quantity" name="food_quantity" placeholder="ปริมาณอาหาร" required><br>
                 </div>
-                <p>ช่วงเวลาการให้อาหาร</p>
+                <p><b>ช่วงเวลาการให้อาหาร</b></p>
+
+                <div class="padding-time" >
                 <div>
+                    <div style="display:flex;justify-content: space-around;align-items: center;">
+                        <label for="stime_1">เริ่มมื้อ 1  </label>
+                        <input type="time" id="stime_1" name="stime_1" required  >
+                    </div>
+
+                    <div style="display:flex;justify-content: space-around;align-items: center; padding-right:5px;">
+                        <label for="etime_1">สิ้นสุดมื้อ 1  </label>
+                        <input type="time" id="etime_1" name="etime_1" required  >
+                    </div>
+                </div>
+                
                 <div>
-                    <label for="stime_1">เริ่มมื้อ 1  </label>
-                    <input type="time" id="stime_1" name="stime_1" required  >
+                    <div style="display:flex;justify-content: space-around;align-items: center; ">
+                        <label for="stime_2">เริ่มมื้อ 2  </label>
+                        <input type="time" id="stime_2" name="stime_2" required  >
+                    </div>
+
+                    <div style="display:flex;justify-content: space-around;align-items: center; padding-right:5px;">
+                        <label for="etime_2">สิ้นสุดมื้อ 2  </label>
+                        <input type="time" id="etime_2" name="etime_2" required  >
+                    </div>
                 </div>
-                <div style="padding-top:20px">
-                    <label for="etime_1">สิ้นสุดมื้อ 1</label>
-                    <input type="time" id="etime_1" name="etime_1" required><br>
-                </div>
-                </div>
-            
+                
                 <div>
-                <div style="padding-top:20px">
-                    <label for="stime_2">เริ่มมื้อ 2 </label>
-                    <input type="time" id="stime_2" name="stime_2" required>
-                </div>
-                <div style="padding-top:20px">
-                    <label for="etime_2">สิ้นสุดมื้อ 2 </label>
-                    <input type="time" id="etime_2" name="etime_2" required><br>
-                </div>
-                </div>
-            
-                <div>
-                <div style="padding-top:20px">
-                    <label for="stime_3">เริ่มมื้อ 3 </label>
-                    <input type="time" id="stime_3" name="stime_3" required>   
-                </div>
-                <div style="padding-top:20px"> 
-                    <label for="etime_3">สิ้นสุดมื้อ 3 </label>
-                    <input type="time" id="etime_3" name="etime_3" required><br>   
+                    <div style="display:flex;justify-content: space-around;align-items: center;">
+                        <label for="stime_3">เริ่มมื้อ 3  </label>
+                        <input type="time" id="stime_3" name="stime_3" required  >
+                    </div>
+
+                    <div style="display:flex;justify-content: space-around;align-items: center; padding-right:5px;">
+                        <label for="etime_3">สิ้นสุดมื้อ 3  </label>
+                        <input type="time" id="etime_3" name="etime_3" required  >
+                    </div>
                 </div>
                 </div>
             
                 <br>
-                <label for="food_container">ถังอาหาร</label><br>
-                <input type="radio" id="tank1" name="tank" value="${data[0]['id_tank']}" required>
-                <label for="tank1" id="tank1">${data[0].name_tank}</label><br>
-                            
-                <input type="radio" id="tank2" name="tank" value="${data[1]['id_tank']}" required>
-                <label for="tank2" id="tank2">${data[1].name_tank}</label><br>
-            
+                <label for="food_container"><b>ถังอาหาร</b></label><br>
+                <div style="display:flex;align-items: center;padding-right:5px;flex-direction: row;justify-content: center;padding-top:20px">
+                
+                    <input type="radio" id="tank1" name="tank" value="${data[0]['id_tank']}" required>
+                    <label for="tank1" id="tank1">${data[0].name_tank}</label><br>
+                                
+                    <input type="radio" id="tank2" name="tank" value="${data[1]['id_tank']}" required>
+                    <label for="tank2" id="tank2">${data[1].name_tank}</label><br>
+                </div>
                 <br>
                 <button type="submit" value="Submit">Submit</button>
                 <button type="reset" onclick="redirectToSetting()">Cancel</button>
@@ -221,7 +234,7 @@ function lineSetting() {
     catSetting.innerHTML = ``
     const hideCatSettingElement = document.getElementById('hideCatSetting');
     hideCatSettingElement.innerHTML = `
-        <div  style="text-align: center; padding-top: 20px;">
+        <div  style="text-align: center; padding-top: 250px;">
             <form id="updateFormLine" action="/insertLine" method="post">
                 <div>
                     <label for="token">Token Line (สำหรับใช้การแจ้งเตือน)</label><br>
@@ -243,7 +256,7 @@ function tankSetting() {
     catSetting.innerHTML = ``
     const hideCatSettingElement = document.getElementById('hideCatSetting');
     hideCatSettingElement.innerHTML = `
-        <div  style="text-align: center; padding-top: 20px;">
+        <div  style="text-align: center; padding-top: 200px; ">
             <form id="updateFormTank" action="/insertTank" method="post">
                 <div>
                     <label for="Tank1">Rename ${data[0].name_tank}</label><br>
@@ -251,16 +264,16 @@ function tankSetting() {
                 </div><br>
                 <div>
                     <label for="percenTank1">แจ้งเตือนเมื่อปริมาณอาหารถัง ${data[0].name_tank} <br>ต่ำกว่า(ร้อยละ)</label><br>
-                    <input type="text" id="percenTank1" name="percenTank1" placeholder="ร้อยละ" required><br>
+                    <input type="text" id="percenTank1" name="percenTank1" placeholder="ร้อยละ" value="${data[0].notification_percen}" required><br>
                 </div><br>
 
-                <div>
+                <div style="padding-top:30px">
                     <label for="percenTank2">Rename ${data[1].name_tank}</label><br>
                     <input type="text" id="Tank2" name="Tank2" placeholder="Rename tank2" value="${data[1].name_tank}" required><br>
                 </div><br>
                 <div>
                     <label for="percenTank2">แจ้งเตือนเมื่อปริมาณอาหารถัง ${data[1].name_tank} <br>ต่ำกว่า(ร้อยละ)</label><br>
-                    <input type="text" id="percenTank2" name="percenTank2" placeholder="ร้อยละ" required><br>
+                    <input type="text" id="percenTank2" name="percenTank2" placeholder="ร้อยละ" value="${data[1].notification_percen}" required><br>
                 </div><br>
                 
                 <button type="submit" value="Submit">Submit</button>
